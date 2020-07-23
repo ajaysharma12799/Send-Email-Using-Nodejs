@@ -18,7 +18,9 @@
         </nav>
     </div>
     <div class="container mx-auto my-auto">
-        <form action="#" method="POST">
+        <%- include('./partials/flashMessage.ejs') %>
+        <br>
+        <form action="/" method="POST">
             <div class="form-group">
                 <input class="form-control" type="text" name="name" placeholder="Enter Name">
             </div>
@@ -26,7 +28,7 @@
                 <input class="form-control" type="email" name="email" placeholder="Enter E-Mail">
             </div>
             <div class="form-group">
-                <textarea name="message" class="form-control" cols="30" rows="10" style="resize: none;"></textarea>
+                <textarea name="message" class="form-control" cols="30" rows="10" style="resize: none;" placeholder="Enter Message" ></textarea>
             </div>
             <div>
                 <button type="submit" class="btn btn-block btn-primary"> Send </button>

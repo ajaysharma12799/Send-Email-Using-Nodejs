@@ -1,0 +1,31 @@
+<!-- TO SHOW ALL ERROR AT TIME OF FORM VALIDATION -->
+<% if(typeof errors != 'undefined') { %>
+    <% errors.forEach(function(error) { %>
+        <div class="container alert alert-warning alert-dismissible fade show" role="alert">
+            <%= error.message %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    <%} ) %>
+<% } %>
+
+<!-- TO SHOW SUCCESS MESSAGE AT TIME OF POSITIVE VALIDATION -->
+<% if(typeof success_msg != '') { %>
+        <div class="container alert alert-success alert-dismissible fade show" role="alert">
+            <%= success_msg %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+<% } %>
+
+<!-- TO SHOW ERROR MESSAGE AT TIME OF NEGATIVE VALIDATION -->
+<% if(error_msg != ''){ %>
+    <div class=" container alert alert-danger alert-dismissible fade show" role="alert">
+      <%= error_msg %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+<% } %>
