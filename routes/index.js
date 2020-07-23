@@ -2,10 +2,10 @@ const router = require('express').Router();
 const nodeMailer = require('nodemailer');
 
 router.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.render('index');
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 
     let errors = [];
     const { name, email, message } = req.body;
@@ -17,13 +17,44 @@ router.post('/', (req, res) => {
     }
 
     if(errors.length > 0) { // CHECKING WHETHER ERRORS-ARRAY CONTAIN ANY ERROR, IF YES THEN WE RENDER PAGE AGAIN WITH ERRORS
-        res.render('index');
+        res.render('index', {
+            errors,
+            name, email
+        });
     }
     else { // PASSING ALL VALIDATION FIELDS
-        // Todo: Work on NodeMailer here
-        console.log(req.body);
-        req.flash('success_msg', 'You Can now proceed');
-        res.redirect('/');
+        // let testAccount = nodeMailer.createTestAccount(); // THIS METHOD GENERATE TEST SMTP SERVICE ACCOUNT FROM ETHERNAL.MAIL, ONLY USE THIS WHEN YOU DON'T HAVE ORIGINAL ACCOUNT FOR TESTING
+
+        let transporter = nodeMailer.createTransport({ // CREATING RESUABLE TRANSPORT OBJECT WHICH USE DEFAULT SMTP PORT
+            host: 'in-v3.mailjet.com',
+            port: 587,
+            secure: true,
+            tls: {
+                rejectUnauthorized: false
+            },  
+            auth: {
+                user: process.env.SMTP_USERNAME,
+                pass: process.env.SMTP_PASSWORD
+            }
+        });
+
+        let info = transporter.sendMail({ // SendMail METHOD IS USED TO SEND EMAIL WITH TRANSPORTER OBJECT  
+            from: email,
+            to: process.env.EMAIL_TO,
+            subject: 'TEST EMAIL',
+            html: `<h1> ${message} </h1>`
+        });
+
+        info
+        .then( () => {
+            req.flash('success_msg', 'Successfully Email Sent');
+            res.redirect('/');
+        } )
+        .catch( (error) => {
+            console.log(error);
+            req.flash('error_msg', 'Failed To Sent Email');
+            res.redirect('/');
+        } )
     }
 
 });
